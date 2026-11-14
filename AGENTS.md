@@ -181,7 +181,7 @@ Edit the SVG in `scripts/og.mjs`, then run `npm run og`. (Uses `sharp`, which co
 - [ ] `src/pages/about.astro`: real university/year and course names (placeholders in `[...]`), real portrait photo.
 - [ ] Real before/after photos for portfolio cases (currently geometric placeholders via `Art.astro`).
 - [ ] 50 essay drafts in `drafts/thoughts/` await the owner's review before publishing. Unconfirmed citations: Tarantili et al. 2005 (`smile-and-face-shape.md`), Newton et al. 2003 (`teeth-as-health-signal.md`, `surveys-teeth-partner-choice.md`), WHO 2015 sugar guideline URL (`diet-and-smile.md`). Check study figures against the abstracts.
-- [ ] Project is **not under git version control** locally yet — recommend `git init` + push to the GitHub repo connected to Pages.
+- [x] Git connected: `origin` = https://github.com/mohammadzenali-coder/ddszeinali (public, branch `main`). `drafts/` is in `.gitignore` on purpose (unpublished drafts stay local). Owner must still set **Settings → Pages → Source: GitHub Actions** and the DNS records for ddszeinali.ir if not done.
 
 ## 11. Don'ts (summary)
 
