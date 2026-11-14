@@ -1,0 +1,7 @@
+node_modules/
+dist/
+.astro/
+
+# Unpublished drafts stay on this computer only (repo is public)
+drafts/
+templates/.tmp/

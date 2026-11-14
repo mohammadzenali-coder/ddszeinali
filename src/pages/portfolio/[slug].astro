@@ -1,0 +1,51 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHead from '../../components/PageHead.astro';
+import Art from '../../components/Art.astro';
+import { getCollection, render } from 'astro:content';
+import { SITE, faDate } from '../../site';
+
+export async function getStaticPaths() {
+  return (await getCollection('portfolio')).map((c) => ({ params: { slug: c.id }, props: { c } }));
+}
+const { c } = Astro.props;
+const { Content } = await render(c);
+const schema = [{
+  '@type': 'CreativeWork',
+  name: c.data.title,
+  description: c.data.description,
+  dateCreated: c.data.date.toISOString(),
+  author: { '@id': `${SITE.url}/#person` },
+  inLanguage: 'fa-IR',
+}];
+---
+<Base title={c.data.title} description={c.data.description} type="article" schema={schema} published={c.data.date}
+  breadcrumbs={[{ name: 'نمونه‌کارها', url: '/portfolio/' }, { name: c.data.title, url: `/portfolio/${c.id}/` }]}>
+  <PageHead kicker={c.data.service} title={c.data.title} lead={c.data.description} color="yellow" />
+  <section class="section">
+    <div class="wrap">
+      <div class="ba">
+        <figure><Art v={c.data.art} label="پیش از درمان" /><figcaption class="label">پیش از درمان</figcaption></figure>
+        <figure><Art v={c.data.art + 1} label="پس از درمان" /><figcaption class="label">پس از درمان</figcaption></figure>
+      </div>
+      <dl class="meta">
+        <div><dt class="label muted">خدمت</dt><dd>{c.data.service}</dd></div>
+        {c.data.sessions && <div><dt class="label muted">تعداد جلسات</dt><dd>{c.data.sessions}</dd></div>}
+        <div><dt class="label muted">تاریخ</dt><dd>{faDate(c.data.date)}</dd></div>
+      </dl>
+      <article class="prose"><Content /></article>
+      <p class="label muted note">انتشار تصاویر با رضایت کتبی بیمار انجام شده است. نتایج درمان در افراد مختلف متفاوت است.</p>
+      <a class="btn btn--ghost" href="/portfolio/">→ همه‌ی نمونه‌کارها</a>
+    </div>
+  </section>
+</Base>
+<style>
+  .ba { display: grid; gap: var(--md); margin-bottom: var(--lg); }
+  @media (min-width: 720px) { .ba { grid-template-columns: 1fr 1fr; } }
+  figure { margin: 0; }
+  figcaption { background: var(--text); color: #fff; display: inline-block; padding: 2px 10px; }
+  .meta { display: flex; flex-wrap: wrap; gap: 0; margin: 0 0 var(--lg); border: var(--b2) solid var(--border); background: var(--surface); }
+  .meta div { padding: var(--sm) var(--md); border-inline-end: var(--b2) solid var(--border); }
+  .meta dd { margin: 0; font-weight: 700; }
+  .note { margin-block: var(--lg) var(--md); }
+</style>

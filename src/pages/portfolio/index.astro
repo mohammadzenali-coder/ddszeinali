@@ -1,0 +1,29 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHead from '../../components/PageHead.astro';
+import Art from '../../components/Art.astro';
+import { getCollection } from 'astro:content';
+import { faNum } from '../../site';
+const cases = (await getCollection('portfolio')).sort((a, b) => +b.data.date - +a.data.date);
+---
+<Base title="نمونه‌کارهای دندانپزشکی زیبایی" description="نمونه‌کارهای دکتر محمد رضا زینلی در کامپوزیت ونیر، طراحی لبخند، زیبایی لبخند و بلیچینگ؛ هر پرونده با شرح مسئله، طرح درمان و نتیجه."
+  breadcrumbs={[{ name: 'نمونه‌کارها', url: '/portfolio/' }]}>
+  <PageHead kicker="پرونده‌ها" title="نمونه‌کارها" lead="هر پرونده یک مسئله‌ی طراحی است: تحلیل، طرح درمان، اجرا و نتیجه." color="blue" />
+  <section class="section">
+    <div class="wrap grid g-3">
+      {cases.map((c, i) => (
+        <a class="card pc" href={`/portfolio/${c.id}/`}>
+          <Art v={c.data.art} label={c.data.title} />
+          <span class="label">{faNum(String(i + 1).padStart(2, '0'))} — {c.data.service}</span>
+          <h2 class="h-sm">{c.data.title}</h2>
+          <p class="muted">{c.data.description}</p>
+        </a>
+      ))}
+    </div>
+  </section>
+</Base>
+<style>
+  .pc { display: flex; flex-direction: column; gap: var(--sm); text-decoration: none; }
+  .pc p { margin: 0; }
+  .pc:hover { background: var(--yellow); }
+</style>

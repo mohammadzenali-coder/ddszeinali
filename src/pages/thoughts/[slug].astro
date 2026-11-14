@@ -1,0 +1,56 @@
+---
+import Base from '../../layouts/Base.astro';
+import Art from '../../components/Art.astro';
+import { getCollection, render } from 'astro:content';
+import { SITE, faDate } from '../../site';
+
+export async function getStaticPaths() {
+  return (await getCollection('thoughts')).map((p) => ({ params: { slug: p.id }, props: { p } }));
+}
+const { p } = Astro.props;
+const { Content } = await render(p);
+const schema = [{
+  '@type': 'BlogPosting',
+  headline: p.data.title,
+  description: p.data.description,
+  datePublished: p.data.date.toISOString(),
+  author: { '@id': `${SITE.url}/#person` },
+  publisher: { '@id': `${SITE.url}/#person` },
+  mainEntityOfPage: `${SITE.url}/thoughts/${p.id}/`,
+  image: `${SITE.url}/og.png`,
+  inLanguage: 'fa-IR',
+  keywords: p.data.tags.join('، '),
+}];
+---
+<Base title={p.data.title} description={p.data.description} type="article" schema={schema} published={p.data.date}
+  breadcrumbs={[{ name: 'یادداشت‌ها', url: '/thoughts/' }, { name: p.data.title, url: `/thoughts/${p.id}/` }]}>
+  <article>
+    <header class="ah">
+      <div class="wrap">
+        <p class="label"><a href="/thoughts/">یادداشت‌ها</a> / <time datetime={p.data.date.toISOString()}>{faDate(p.data.date)}</time></p>
+        <h1 class="h-lg">{p.data.title}</h1>
+        <p class="ah__lead">{p.data.description}</p>
+        <p class="label">نوشته‌ی <a href="/about/">{SITE.name}</a></p>
+      </div>
+    </header>
+    {p.data.art !== undefined && (
+      <div class="wrap"><figure class="ah__art"><Art v={p.data.art} label={p.data.title} /></figure></div>
+    )}
+    <div class="section"><div class="wrap prose"><Content /></div></div>
+  </article>
+  <section class="section">
+    <div class="wrap end">
+      <i class="tr" style="--s:40px"></i>
+      <p class="h-sm">سؤالی درباره‌ی لبخندتان دارید؟</p>
+      <a class="btn" href="/contact/">تماس با من</a>
+    </div>
+  </section>
+</Base>
+<style>
+  .ah { background: var(--yellow); border-bottom: var(--b3) solid var(--border); padding-block: var(--lg); }
+  .ah h1 { max-width: 22ch; margin-block: var(--sm); }
+  .ah__lead { font-size: 19px; max-width: 56ch; }
+  .ah__art { max-width: 720px; margin: var(--lg) 0 0; }
+  .end { display: flex; flex-wrap: wrap; align-items: center; gap: var(--md); }
+  .end p { margin: 0; flex: 1; }
+</style>

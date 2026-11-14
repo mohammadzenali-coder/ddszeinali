@@ -1,0 +1,50 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHead from '../components/PageHead.astro';
+import { getCollection } from 'astro:content';
+const services = (await getCollection('services')).sort((a, b) => a.data.order - b.data.order);
+const shapes = ['sq', 'tr', 'ci', 'sq'];
+---
+<Base title="دندانپزشکی زیبایی و لاکچری لبخند" description="دندانپزشکی زیبایی از نگاه دکتر محمد رضا زینلی: کامپوزیت ونیر، طراحی لبخند، زیبایی لبخند و بلیچینگ با رویکرد مینیمال و طبیعی."
+  breadcrumbs={[{ name: 'زیبایی‌شناسی', url: '/aesthetics/' }]}>
+  <PageHead kicker="Aesthetics" title="دندانپزشکی زیبایی" lead="لاکچری در لبخند یعنی چیزی که دیده نمی‌شود: دقت، تناسب و سکوت جزئیات." color="red" />
+
+  <section class="section">
+    <div class="wrap lx">
+      <div class="prose">
+        <h2>لاکچری یعنی کمتر، اما دقیق‌تر</h2>
+        <p>در فرهنگ عمومی، «لبخند لاکچری» اغلب با دندان‌های بیش از حد سفید و یک‌شکل شناخته می‌شود. نگاه من برعکس است: لبخند لاکچری لبخندی است که <strong>کسی متوجه درمان‌شدنش نشود</strong>.</p>
+        <p>همان‌طور که در طراحی باهاوس هر عنصر باید دلیلی برای بودن داشته باشد، در دندانپزشکی زیبایی هم هر میلی‌متر باید توجیه داشته باشد: بر اساس خط لب، میانه‌ی صورت، رنگ پوست و حتی شخصیت فرد.</p>
+        <blockquote><p>زیبایی تزئین نیست؛ نتیجه‌ی تصمیم‌های درست است.</p></blockquote>
+        <h2>مسیر درمان</h2>
+        <ol>
+          <li><strong>تحلیل:</strong> عکاسی، ویدیو و بررسی تناسبات صورت.</li>
+          <li><strong>طراحی:</strong> طراحی دیجیتال لبخند و پیش‌نمایش (<span class="en">Mock-up</span>).</li>
+          <li><strong>اجرا:</strong> با کم‌تهاجمی‌ترین روش ممکن.</li>
+          <li><strong>نگهداری:</strong> برنامه‌ی پیگیری و پرداخت دوره‌ای.</li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <section class="section svcs">
+    <div class="wrap">
+      <div class="sec-head"><span class="label">خدمات</span><h2 class="h-lg">خدمات دندانپزشکی زیبایی</h2></div>
+      <div class="grid g-2">
+        {services.map((s, i) => (
+          <a class="card sv" href={`/services/${s.id}/`}>
+            <i class={shapes[i]} style="--s:36px"></i>
+            <div><h3 class="h-sm">{s.data.title}</h3><p class="label en muted">{s.data.en}</p><p class="muted">{s.data.description}</p></div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+</Base>
+<style>
+  .svcs { background: var(--surface); }
+  .sv { display: grid; grid-template-columns: auto 1fr; gap: var(--md); text-decoration: none; background: var(--bg); }
+  .sv p { margin: 0; }
+  .sv:hover { background: var(--text); color: #fff; }
+  .sv:hover .muted { color: #ddd; }
+</style>

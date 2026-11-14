@@ -1,0 +1,50 @@
+---
+import { NAV } from '../site';
+const path = Astro.url.pathname;
+---
+<header class="hd">
+  <div class="wrap hd__in">
+    <a href="/" class="logo" aria-label="دکتر محمد رضا زینلی — صفحه اصلی">
+      <span class="logo__mark" aria-hidden="true"><i class="sq"></i><i class="ci"></i><i class="tr"></i></span>
+      <span class="logo__txt">دکتر زینلی</span>
+    </a>
+    <details class="menu">
+      <summary class="label" aria-label="منو">منو</summary>
+      <nav aria-label="اصلی">
+        <ul>
+          {NAV.map((n) => (
+            <li><a href={n.href} aria-current={path.startsWith(n.href) ? 'page' : undefined}>{n.label}</a></li>
+          ))}
+        </ul>
+      </nav>
+    </details>
+  </div>
+</header>
+
+<style>
+  .hd { border-bottom: var(--b3) solid var(--border); background: var(--bg); position: sticky; top: 0; z-index: 5; }
+  .hd__in { display: flex; align-items: center; justify-content: space-between; min-height: 72px; }
+  .logo { display: flex; align-items: center; gap: 12px; text-decoration: none; font-weight: 800; font-size: 20px; }
+  .logo__mark { display: flex; gap: 3px; }
+  .logo__mark i { --s: 14px; }
+  .menu summary { list-style: none; cursor: pointer; border: var(--b2) solid var(--border); padding: 6px 14px; background: var(--surface); }
+  .menu summary::-webkit-details-marker { display: none; }
+  .menu[open] summary { background: var(--text); color: #fff; }
+  .menu nav { position: absolute; inset-inline: 0; top: 100%; background: var(--bg); border-bottom: var(--b3) solid var(--border); }
+  ul { list-style: none; margin: 0; padding: 0; }
+  li a { display: block; padding: 14px var(--md); border-top: var(--b1) solid var(--border); text-decoration: none; font-weight: 700; }
+  a[aria-current] { background: var(--yellow); }
+  @media (min-width: 860px) {
+    .menu summary { display: none; }
+    .menu nav { position: static; border: 0; background: none; }
+    .menu:not([open]) nav { display: block; }
+    ul { display: flex; }
+    li a { border: 0; border-inline-start: var(--b2) solid var(--border); padding: 22px var(--md); }
+    li:last-child a { border-inline-end: var(--b2) solid var(--border); }
+    li a:hover { background: var(--text); color: #fff; }
+  }
+</style>
+<script is:inline>
+  // روی دسکتاپ منو همیشه باز است
+  if (matchMedia('(min-width:860px)').matches) document.querySelector('.menu')?.setAttribute('open', '');
+</script>

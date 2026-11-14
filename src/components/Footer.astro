@@ -1,0 +1,34 @@
+---
+import { SITE, SERVICES, NAV, faNum } from '../site';
+---
+<footer class="ft">
+  <div class="wrap ft__grid">
+    <div>
+      <p class="h-sm">{SITE.name}</p>
+      <p class="muted">دندانپزشکی زیبایی — جایی که فرم از عملکرد پیروی می‌کند.</p>
+    </div>
+    <nav aria-label="خدمات">
+      <p class="label">خدمات</p>
+      <ul>{SERVICES.map((s) => <li><a href={`/services/${s.slug}/`}>{s.title}</a></li>)}</ul>
+    </nav>
+    <nav aria-label="پیوندها">
+      <p class="label">پیوندها</p>
+      <ul>{NAV.map((n) => <li><a href={n.href}>{n.label}</a></li>)}<li><a href="/rss.xml">خوراک RSS</a></li></ul>
+    </nav>
+  </div>
+  <div class="ft__bar">
+    <div class="wrap">© {faNum(new Date().getFullYear())} {SITE.name}</div>
+  </div>
+</footer>
+
+<style>
+  .ft { background: var(--surface); }
+  .ft__grid { display: grid; gap: var(--lg); padding-block: var(--lg); }
+  @media (min-width: 720px) { .ft__grid { grid-template-columns: 2fr 1fr 1fr; } }
+  ul { list-style: none; margin: 0; padding: 0; }
+  li { margin-bottom: 4px; }
+  a { text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .label { margin-bottom: var(--xs); border-bottom: var(--b2) solid var(--border); display: inline-block; }
+  .ft__bar { background: var(--text); color: #fff; padding-block: var(--sm); font-size: 13px; }
+</style>

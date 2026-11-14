@@ -1,0 +1,95 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHead from '../../components/PageHead.astro';
+import Art from '../../components/Art.astro';
+import { getCollection, render } from 'astro:content';
+import { SITE } from '../../site';
+
+export async function getStaticPaths() {
+  const items = await getCollection('services');
+  return items.map((s) => ({ params: { slug: s.id }, props: { s, all: items } }));
+}
+const { s, all } = Astro.props;
+const { Content } = await render(s);
+const others = all.filter((x) => x.id !== s.id).sort((a, b) => a.data.order - b.data.order);
+const colors = ['red', 'blue', 'yellow', 'red'] as const;
+
+const schema = [
+  {
+    '@type': 'MedicalProcedure',
+    name: s.data.title,
+    alternateName: s.data.en,
+    description: s.data.description,
+    url: `${SITE.url}/services/${s.id}/`,
+    procedureType: 'https://schema.org/NoninvasiveProcedure',
+    provider: { '@id': `${SITE.url}/#dentist` },
+  },
+  ...(s.data.faqs.length
+    ? [{
+        '@type': 'FAQPage',
+        mainEntity: s.data.faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+      }]
+    : []),
+];
+---
+<Base title={s.data.seoTitle} description={s.data.description} schema={schema}
+  breadcrumbs={[{ name: 'خدمات', url: '/aesthetics/' }, { name: s.data.title, url: `/services/${s.id}/` }]}>
+  <PageHead kicker="دندانپزشکی زیبایی" title={s.data.title} lead={s.data.description} color={colors[s.data.order - 1] ?? 'red'}>
+    <p class="label en muted" style="margin-top:8px">{s.data.en}</p>
+  </PageHead>
+
+  <section class="section">
+    <div class="wrap svc">
+      <article class="prose"><Content /></article>
+      <aside class="svc__side">
+        <Art v={s.data.art} label={s.data.title} />
+        <div class="card">
+          <p class="h-sm">مشاوره {s.data.title}</p>
+          <p class="muted">برای بررسی شرایط لبخندتان پیام بدهید.</p>
+          <a class="btn" href="/contact/">درخواست مشاوره</a>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  {s.data.faqs.length > 0 && (
+    <section class="section faq">
+      <div class="wrap">
+        <div class="sec-head"><i class="ci" style="--s:28px"></i><h2 class="h-lg">پرسش‌های رایج</h2></div>
+        <div class="faq__list">
+          {s.data.faqs.map((f) => (
+            <details class="card">
+              <summary class="h-sm">{f.q}</summary>
+              <p>{f.a}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <section class="section">
+    <div class="wrap">
+      <div class="sec-head"><i class="sq" style="--s:28px"></i><h2 class="h-sm">خدمات دیگر</h2></div>
+      <div class="grid g-3">
+        {others.map((o) => (
+          <a class="card other" href={`/services/${o.id}/`}><span class="h-sm">{o.data.title}</span><span class="label en muted">{o.data.en}</span></a>
+        ))}
+      </div>
+    </div>
+  </section>
+</Base>
+<style>
+  .svc { display: grid; gap: var(--lg); }
+  @media (min-width: 900px) { .svc { grid-template-columns: 1fr 340px; } .svc__side { position: sticky; top: 100px; align-self: start; } }
+  .svc__side { display: grid; gap: var(--md); }
+  .faq { background: var(--surface); }
+  .faq__list { display: grid; gap: var(--sm); max-width: 820px; }
+  .faq summary { cursor: pointer; list-style: none; display: flex; justify-content: space-between; gap: var(--sm); }
+  .faq summary::after { content: '+'; font-weight: 800; }
+  .faq details[open] summary::after { content: '−'; }
+  .faq details[open] { background: var(--bg); }
+  .faq p { margin: var(--sm) 0 0; }
+  .other { display: flex; flex-direction: column; text-decoration: none; }
+  .other:hover { background: var(--text); color: #fff; }
+</style>

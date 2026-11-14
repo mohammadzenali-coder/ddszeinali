@@ -1,0 +1,53 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHead from '../components/PageHead.astro';
+import { SITE } from '../site';
+const principles = [
+  { s: 'sq', t: 'تناسب پیش از درخشش', d: 'لبخند باید با صورت، لب و سن فرد هماهنگ باشد؛ نه با یک الگوی تکراری.' },
+  { s: 'ci', t: 'حفظ بافت طبیعی', d: 'هر جا ممکن باشد، روش‌های کم‌تهاجمی و حداقل تراش را انتخاب می‌کنم.' },
+  { s: 'tr', t: 'طراحی پیش از اجرا', d: 'هیچ درمانی بدون تحلیل دیجیتال و پیش‌نمایش لبخند آغاز نمی‌شود.' },
+];
+---
+<Base title="درباره‌ی دکتر محمد رضا زینلی" description="آشنایی با دکتر محمد رضا زینلی، دندانپزشک زیبایی؛ فلسفه‌ی درمان، تحصیلات و رویکرد او در کامپوزیت ونیر و طراحی لبخند."
+  breadcrumbs={[{ name: 'درباره', url: '/about/' }]}>
+  <PageHead kicker="درباره" title={SITE.name} lead="دندانپزشک زیبایی؛ با باور به اینکه زیبایی، نتیجه‌ی طراحی دقیق است." color="yellow" />
+
+  <section class="section">
+    <div class="wrap ab">
+      <div class="ab__photo" aria-label="جای تصویر پرتره">
+        <span class="label">تصویر پرتره</span>
+      </div>
+      <div class="prose">
+        <h2>داستان من</h2>
+        <p>من محمد رضا زینلی هستم، دندانپزشک. از همان سال‌های دانشجویی، بیش از هر چیز جذب جنبه‌ی طراحانه‌ی دندانپزشکی شدم: اینکه چطور چند میلی‌متر تغییر در طول، زاویه یا رنگ یک دندان می‌تواند حس کل چهره را عوض کند.</p>
+        <p>امروز تمرکز کارم بر <strong>دندانپزشکی زیبایی</strong> است: کامپوزیت ونیر، طراحی لبخند (<span class="en">Smile Design</span>)، زیبایی لبخند و بلیچینگ.</p>
+        <h2>تحصیلات و دوره‌ها</h2>
+        <ul>
+          <li>دکترای حرفه‌ای دندانپزشکی — [نام دانشگاه، سال]</li>
+          <li>دوره‌ی تخصصی کامپوزیت ونیر — [نام دوره]</li>
+          <li>دوره‌ی طراحی دیجیتال لبخند (<span class="en">DSD</span>) — [نام دوره]</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section principles">
+    <div class="wrap">
+      <div class="sec-head"><span class="label">اصول</span><h2 class="h-lg">سه اصل کار من</h2></div>
+      <div class="grid g-3">
+        {principles.map((p) => (
+          <div class="card"><i class={p.s} style="--s:40px"></i><h3 class="h-sm">{p.t}</h3><p class="muted">{p.d}</p></div>
+        ))}
+      </div>
+    </div>
+  </section>
+</Base>
+<style>
+  .ab { display: grid; gap: var(--lg); }
+  @media (min-width: 900px) { .ab { grid-template-columns: 4fr 7fr; } }
+  .ab__photo { aspect-ratio: 4/5; border: var(--b3) solid var(--border); background: linear-gradient(var(--blue) 0 0) bottom / 100% 35% no-repeat, var(--surface); display: grid; place-items: center; }
+  .ab__photo .label { background: var(--yellow); border: var(--b2) solid var(--border); padding: 2px 10px; }
+  .principles { background: var(--surface); }
+  .principles .card { background: var(--bg); display: grid; gap: var(--sm); align-content: start; }
+  .principles p { margin: 0; }
+</style>

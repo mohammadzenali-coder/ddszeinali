@@ -1,0 +1,38 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHead from '../components/PageHead.astro';
+import { SITE } from '../site';
+const channels = [
+  { label: 'ایمیل', value: SITE.email, href: `mailto:${SITE.email}`, s: 'sq' },
+  { label: 'اینستاگرام', value: '@ddszeinali', href: SITE.instagram, s: 'ci' },
+  ...(SITE.phone ? [{ label: 'تلفن', value: SITE.phone, href: `tel:${SITE.phone}`, s: 'tr' }] : []),
+];
+---
+<Base title="تماس و نوبت مشاوره" description="راه‌های تماس با دکتر محمد رضا زینلی برای مشاوره‌ی دندانپزشکی زیبایی، کامپوزیت ونیر و طراحی لبخند."
+  breadcrumbs={[{ name: 'تماس', url: '/contact/' }]}>
+  <PageHead kicker="تماس" title="بیایید صحبت کنیم" lead="برای مشاوره، عکسی از لبخندتان بفرستید و توضیح کوتاهی بنویسید." color="blue" />
+  <section class="section">
+    <div class="wrap grid g-2">
+      <ul class="ch">
+        {channels.map((c) => (
+          <li><a class="card" href={c.href} rel="noopener"><i class={c.s} style="--s:28px"></i><span><span class="label muted">{c.label}</span><span class="h-sm en">{c.value}</span></span></a></li>
+        ))}
+      </ul>
+      <div class="card clinic">
+        <p class="label">آدرس مطب</p>
+        {SITE.clinic
+          ? <p class="h-sm">{SITE.clinic.city} — {SITE.clinic.street}</p>
+          : <p class="h-sm">به‌زودی اعلام می‌شود.</p>}
+        <p class="muted">ساعات کاری و نشانی دقیق پس از راه‌اندازی مطب در همین صفحه منتشر خواهد شد.</p>
+      </div>
+    </div>
+  </section>
+</Base>
+<style>
+  .ch { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--sm); }
+  .ch a { display: flex; align-items: center; gap: var(--md); text-decoration: none; }
+  .ch a > span { display: grid; }
+  .ch a:hover { background: var(--yellow); }
+  .clinic { background: var(--blue); color: #fff; }
+  .clinic .muted { color: #E5E7EB; }
+</style>
